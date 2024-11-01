@@ -20,11 +20,16 @@ This repository hosts a Document Management Application (DMA) built with a React
 - **CSS/Bootstrap**: For styling components and ensuring a responsive, user-friendly UI.
 - **Lucide Icons**: Provides icons for better visual representation (e.g., upload, download icons).
 
-**Backend** (Django):
-- **Django REST Framework (DRF)**: Implements API endpoints for handling user authentication and document CRUD operations.
-- **SimpleJWT**: Provides JWT-based authentication for secure access to API resources.
-- **SQLite**: The database used to store user information and document metadata.
-- **File Handling**: Handles document uploads, stores them in the `media` directory, and manages download requests.
+**Back-End (Django):**
+- **Serializers**: Validates and sanitizes input data.
+- **Models**: Defines structures for user data and document paths.
+- **Class-Based Views (CBVs)**: Simplifies endpoint creation.
+- **Django REST Framework**: Facilitates API development.
+- **JWT Authentication**: Secures routes using Django Simple JWT.
+- **Document Listing**: Provides a CBV endpoint for document retrieval.
+- **File Storage**: Manages documents within the Django project directory.
+
+This repository combines React for a responsive front-end with Django REST API on the backend, integrating JWT authentication and file handling for document management.
 
 To set up the **React-Django Document Management Application** locally, follow these steps:
 
