@@ -1,9 +1,8 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost:8000/api';
+import { API_URL } from '../config'; // Import from config.ts
 
 const api = axios.create({
-  baseURL: API_URL,
+  baseURL: `${API_URL}/api`, // Use API_URL from config
 });
 
 // Configure axios to always use the latest token
@@ -65,7 +64,11 @@ export const signup = async (
 export const fetchDocuments = async () => {
   try {
     const response = await api.get('/documents/');
-    return response.data;
+    const documents = response.data.map((doc: any) => ({
+      ...doc,
+      file: doc.file.startsWith('http') ? doc.file : `${API_URL}${doc.file}`,
+    }));
+    return documents;
   } catch (error: any) {
     console.error('Error fetching documents:', error.response?.data || error.message);
     if (error.response?.status === 401) {
@@ -74,6 +77,7 @@ export const fetchDocuments = async () => {
     throw new Error('Failed to fetch documents');
   }
 };
+
 
 export const uploadDocument = async (file: File) => {
   try {
@@ -85,6 +89,7 @@ export const uploadDocument = async (file: File) => {
         'Content-Type': 'multipart/form-data',
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (error: any) {
     console.error('Error uploading document:', error.response?.data || error.message);

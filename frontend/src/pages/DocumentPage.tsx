@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 import { RootState } from '../store';
 import {
   setDocuments,
@@ -26,6 +27,7 @@ const DocumentPage: React.FC = () => {
       dispatch(setLoading(true));
       try {
         const docs = await fetchDocuments();
+        console.log(docs);  // Log to check the `file` path
         dispatch(setDocuments(docs));
       } catch (err: any) {
         dispatch(setError(err.message));
@@ -36,6 +38,7 @@ const DocumentPage: React.FC = () => {
     };
     loadDocuments();
   }, [dispatch, navigate]);
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -144,7 +147,7 @@ const DocumentPage: React.FC = () => {
                 >
                   <span>{doc.name}</span>
                   <a
-                    href={`${API_URL}${doc.file}`}
+                    href={doc.file.startsWith('http') ? doc.file : `${API_URL}${doc.file}`}
                     className="btn btn-outline-primary btn-sm"
                     download
                   >

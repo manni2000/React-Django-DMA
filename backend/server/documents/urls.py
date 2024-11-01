@@ -1,5 +1,7 @@
 # documents/urls.py
 
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import SignUpView, LoginView, DocumentListCreateView, DocumentRetrieveView
@@ -11,3 +13,6 @@ urlpatterns = [
     path('documents/', DocumentListCreateView.as_view(), name='document-list-create'),  # List and create documents
     path('documents/<int:pk>/', DocumentRetrieveView.as_view(), name='document-retrieve'),  # Retrieve a single document
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

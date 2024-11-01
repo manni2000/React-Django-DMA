@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface Document {
   id: string;
   name: string;
-  url: string;
+  file: string; // Changed 'url' to 'file' to match the usage in DocumentsPage.tsx
 }
 
 interface DocumentState {
