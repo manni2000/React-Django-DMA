@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';  
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { API_URL } from '../config';
@@ -21,24 +21,23 @@ const DocumentPage: React.FC = () => {
   );
   const [file, setFile] = useState<File | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null); 
 
   useEffect(() => {
     const loadDocuments = async () => {
       dispatch(setLoading(true));
       try {
         const docs = await fetchDocuments();
-        console.log(docs);  // Log to check the `file` path
         dispatch(setDocuments(docs));
       } catch (err: any) {
         dispatch(setError(err.message));
         if (err.message === 'Please login to view documents') {
-          navigate('/login');
+          setAuthError("Authentication required. Please log in again.");
         }
       }
     };
     loadDocuments();
-  }, [dispatch, navigate]);
-
+  }, [dispatch]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -56,7 +55,6 @@ const DocumentPage: React.FC = () => {
         const updatedDocs = await fetchDocuments();
         dispatch(setDocuments(updatedDocs));
         setFile(null);
-        // Reset file input
         const fileInput = document.getElementById('fileInput') as HTMLInputElement;
         if (fileInput) {
           fileInput.value = '';
@@ -75,38 +73,32 @@ const DocumentPage: React.FC = () => {
     navigate('/');
   };
 
-  if (loading && !documents.length) {
-    return (
-      <div className="container mt-5">
-        <div className="text-center">
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="container mt-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Your Documents</h2>
-        <div>
-          <Link to="/" className="btn btn-outline-primary me-2">
-            <Home className="me-2" />
-            Home
-          </Link>
-          <button className="btn btn-outline-danger" onClick={handleLogout}>
-            <LogOut className="me-2" />
-            Logout
-          </button>
-        </div>
-      </div>
+<div className="container mt-5">
+    <h5 className="text-primary fw-bold text-center display-6">Documents Manager</h5>
+  <div className="d-flex justify-content-end align-items-center mb-4">
+    <div>
+      <Link to="/" className="btn btn-outline-primary me-2">
+        <Home className="me-2" />
+        Home
+      </Link>
+      <button className="btn btn-outline-danger" onClick={handleLogout}>
+        <LogOut className="me-2" />
+        Logout
+      </button>
+    </div>
+  </div>
+</div>
 
-      <div className="card mb-4">
+      {authError && (
+        <div className="alert alert-danger text-center">{authError}</div>
+      )}
+
+      <div className="card shadow-sm mb-4">
         <div className="card-body">
-          <h5 className="card-title">Upload New Document</h5>
-          <div className="mb-3">
+          <h5 className="card-title text-secondary fw-bold">Upload New Document</h5>
+          <div className="input-group mb-3">
             <input
               type="file"
               className="form-control"
@@ -114,38 +106,38 @@ const DocumentPage: React.FC = () => {
               onChange={handleFileChange}
               disabled={loading}
             />
+            <button
+              className="btn btn-primary"
+              onClick={handleUpload}
+              disabled={!file || loading}
+            >
+              <FileUp className="me-2" />
+              {loading ? 'Uploading...' : 'Upload Document'}
+            </button>
           </div>
-          <button
-            className="btn btn-primary"
-            onClick={handleUpload}
-            disabled={!file || loading}
-          >
-            <FileUp className="me-2" />
-            {loading ? 'Uploading...' : 'Upload Document'}
-          </button>
           {uploadError && (
             <div className="alert alert-danger mt-3">{uploadError}</div>
           )}
         </div>
       </div>
 
-      {error && <div className="alert alert-danger">{error}</div>}
+      {error && <div className="alert alert-danger text-center">{error}</div>}
 
       {documents.length === 0 && !loading && !error ? (
-        <div className="alert alert-info">
+        <div className="alert alert-info text-center">
           No documents found. Upload your first document above!
         </div>
       ) : (
-        <div className="card">
+        <div className="card shadow-sm">
           <div className="card-body">
-            <h5 className="card-title mb-3">Your Documents</h5>
+            <h5 className="card-title text-secondary fw-bold mb-3">Your Documents</h5>
             <ul className="list-group">
               {documents.map((doc) => (
                 <li
                   key={doc.id}
                   className="list-group-item d-flex justify-content-between align-items-center"
                 >
-                  <span>{doc.name}</span>
+                  <span className="text-dark fw-medium">{doc.name}</span>
                   <a
                     href={doc.file.startsWith('http') ? doc.file : `${API_URL}${doc.file}`}
                     className="btn btn-outline-primary btn-sm"
