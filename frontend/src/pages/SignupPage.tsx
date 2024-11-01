@@ -10,21 +10,35 @@ const SignupPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    setIsLoading(true);
+    
     if (password !== confirmPassword) {
       setError('Passwords do not match');
+      setIsLoading(false);
       return;
     }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const token = await signup(username, password);
       dispatch(setToken(token));
       navigate('/documents');
-    } catch (err) {
-      setError('Failed to create account');
+    } catch (err: any) {
+      setError(err.message || 'Failed to create account');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -37,7 +51,9 @@ const SignupPage: React.FC = () => {
               <h2 className="card-title text-center mb-4">Sign Up</h2>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label htmlFor="username" className="form-label">Username</label>
+                  <label htmlFor="username" className="form-label">
+                    Username
+                  </label>
                   <input
                     type="text"
                     className="form-control"
@@ -45,10 +61,14 @@ const SignupPage: React.FC = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
+                    minLength={3}
+                    disabled={isLoading}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Password</label>
+                  <label htmlFor="password" className="form-label">
+                    Password
+                  </label>
                   <input
                     type="password"
                     className="form-control"
@@ -56,10 +76,14 @@ const SignupPage: React.FC = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    minLength={8}
+                    disabled={isLoading}
                   />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="confirmPassword" className="form-label">Confirm Password</label>
+                  <label htmlFor="confirmPassword" className="form-label">
+                    Confirm Password
+                  </label>
                   <input
                     type="password"
                     className="form-control"
@@ -67,12 +91,18 @@ const SignupPage: React.FC = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
+                    minLength={8}
+                    disabled={isLoading}
                   />
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
-                <button type="submit" className="btn btn-primary w-100">
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-100"
+                  disabled={isLoading}
+                >
                   <UserPlus className="me-2" />
-                  Sign Up
+                  {isLoading ? 'Creating Account...' : 'Sign Up'}
                 </button>
               </form>
               <div className="mt-3 text-center">
