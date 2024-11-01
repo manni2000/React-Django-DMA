@@ -26,4 +26,97 @@ This repository hosts a Document Management Application (DMA) built with a React
 - **SQLite**: The database used to store user information and document metadata.
 - **File Handling**: Handles document uploads, stores them in the `media` directory, and manages download requests.
 
+To set up the **React-Django Document Management Application** locally, follow these steps:
+
+### Prerequisites
+- **Python 3.8+**
+- **Node.js** (Latest LTS version recommended)
+- **npm** or **yarn**
+- **Git** (to clone the repository)
+
+### 1. Clone the Repository
+First, clone the repository to your local machine:
+```bash
+git clone https://github.com/manni2000/React-Django-DMA.git
+cd React-Django-DMA
+```
+
+### 2. Backend Setup (Django)
+
+1. **Navigate to the Backend Directory**:
+   ```bash
+   cd backend
+   ```
+
+2. **Create and Activate a Virtual Environment**:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+
+3. **Install Python Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Apply Migrations**:
+   ```bash
+   python manage.py migrate
+   ```
+
+5. **Create a Superuser (Optional)**:
+   Create a superuser account to access the Django admin dashboard.
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+6. **Run the Django Development Server**:
+   ```bash
+   python manage.py runserver
+   ```
+   The backend server will start on `http://127.0.0.1:8000`.
+
+### 3. Frontend Setup (React)
+
+1. **Navigate to the Frontend Directory**:
+   ```bash
+   cd ../frontend
+   ```
+
+2. **Install JavaScript Dependencies**:
+   Using `npm`:
+   ```bash
+   npm install
+   ```
+   Or using `yarn`:
+   ```bash
+   yarn install
+   ```
+
+3. **Set the API Base URL**:
+   In the `src/config.ts` file, ensure the `API_URL` is set to your backend URL (usually `http://localhost:8000`):
+   ```javascript
+   export const API_URL = 'http://localhost:8000';
+   ```
+
+4. **Run the React Development Server**:
+   ```bash
+   npm start
+   ```
+   Or with `yarn`:
+   ```bash
+   yarn start
+   ```
+   The frontend server will start on `http://localhost:3000`.
+
+### 4. Testing the Setup
+
+- **Access the Backend API**:
+  Visit `http://127.0.0.1:8000/api/` in your browser to see the Django API endpoints.
+
+- **Access the Frontend Application**:
+  Open `http://localhost:3000` in your browser to access the React frontend interface.
+
+This setup should now allow you to use the **Document Management Application** locally.
+
 This repository demonstrates a full-stack application that combines React’s rich frontend capabilities with Django’s robust backend API services for a comprehensive document management system.
