@@ -28,7 +28,7 @@ class SignUpView(generics.CreateAPIView):
 
 class LoginView(TokenObtainPairView):
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []  # Disable authentication for login
+    authentication_classes = [] 
 
 class DocumentListCreateView(generics.ListCreateAPIView):
     serializer_class = DocumentSerializer
