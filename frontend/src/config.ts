@@ -1,2 +1,2 @@
 // src/config.ts
-export const API_URL = 'http://localhost:8000'; // Replace with your actual API base URL
+export const API_URL = 'https://react-django-dma-backend.onrender.com'; 
