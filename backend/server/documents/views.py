@@ -12,7 +12,7 @@ class SignUpView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.AllowAny]
-    authentication_classes = []  # Disable authentication for signup
+    authentication_classes = [] 
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
